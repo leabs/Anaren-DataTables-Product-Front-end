@@ -1,3 +1,62 @@
+<html>
+<head>
+<!--CSS-->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.0/css/responsive.bootstrap.min.css">
+
+<!--Javascript-->
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.0/js/responsive.bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.0/js/dataTables.responsive.min.js"></script>
+
+<style>
+tfoot {
+  display: table-header-group;
+}
+
+.tab-pane {
+  padding: 20px;
+}
+
+div.dtr-modal div.dtr-modal-display {
+  width: 90%;
+  height: 90%;
+  max-width: 1000px;
+}
+
+.container {
+  max-width: 1170px;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+tbody {
+  font-size: 11px;
+}
+
+.dtr-modal-content > h3 {
+  margin: 0;
+}
+
+a.btn-default, a.btn-warning {
+  margin-bottom: 10px;
+}
+
+tbody > tr > td {
+  text-align: right;
+}
+
+tbody > tr > td:first-child {
+  text-align: left;
+}
+</style>
+</head>
+<body>
 <div class="container">
 
     <div class="col-sm-12">
@@ -829,3 +888,54 @@
     </div>
 
 </div>
+<script>
+
+$(document).ready(function() {
+   $('#example').DataTable( {
+       "columnDefs": [
+
+           {
+               "targets": [ 1 ],
+               "visible": false
+           }
+       ],
+      "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+      "iDisplayLength": -1,
+      initComplete: function () {
+           this.api().columns().every( function () {
+               var column = this;
+               var select = $('<select style="width:100px;"><option value=""></option></select>')
+                   .appendTo( $(column.footer()).empty() )
+                   .on( 'change', function () {
+                       var val = $.fn.dataTable.util.escapeRegex(
+                           $(this).val()
+                       );
+
+                       column
+                           .search( val ? '^'+val+'$' : '', true, false )
+                           .draw();
+                   } );
+
+               column.data().unique().sort().each( function ( d, j ) {
+                   select.append( '<option value="'+d+'">'+d+'</option>' )
+               } );
+           } );
+       },
+       responsive: {
+           details: {
+               display: $.fn.dataTable.Responsive.display.modal( {
+                   header: function ( row ) {
+                       var data = row.data();
+                       return '<h3 style="display:inline-block; padding-right:20px;">' +data[0]+ '</h3><a class="btn btn-warning" href="https://octopart.com/search?manufacturer.displayname=Anaren+Microwave&q=' + data[0] + '" target="_blank">Buy</a><span> </span><a class="btn btn-default">Request Info</a><hr/><ul class="nav nav-tabs"><li class="active"><a data-toggle="tab" href="#home">Overview</a></li><li><a data-toggle="tab" href="#menu1">Documentation</a></li><li><a data-toggle="tab" href="#menu2">Menu 2</a></li></ul><div class="tab-content"><div id="home" class="tab-pane fade in active"><div class="row"><div class="col-sm-4"><img class="img-responsive" src="http://via.placeholder.com/350x250" /></div><div class="col-sm-8"><p>The Xinger-brand 90-degree hybrid coupler is a four port device for equally splitting input signals with a 90 degree phase shift between output ports. Our hybrid couplers offer low insertion loss, tight amplitude balance, and high power capability over a wide bandwidth, making them ideal for power amplifier applications.</p><p>All Xinger components have also been subjected to rigorous qualification testing and are manufactured using materials that are coefficient of thermal expansion (CTE) compatible with common substrates such as FR4, G-10, RF-35, RO4350, and polyimide. Xinger-brand couplers are supplied in a manufacturing-friendly surface mount package. They are also RoHS-compliant, range in frequency from 225 MHz to 6.0 GHz, and handle power levels of up to 500 Watts CW.</p><p>For further details and specifications in additional bands for each component, view that products documentation. To view the conversion chart for return loss vs. voltage standing wave ratio, download the chart application note.</p></div></div></div><div id="menu1" class="tab-pane fade"><p>Some content in menu 1.</p></div><div id="menu2" class="tab-pane fade"><h3>Menu 2</h3><p>Some content in menu 2.</p></div></div>';}
+               } ),
+               renderer: $.fn.dataTable.Responsive.renderer.tableAll( {
+                   tableClass: 'table'
+               } )
+           }
+       }
+   } );
+} );
+</script>
+
+</body>
+</html>
