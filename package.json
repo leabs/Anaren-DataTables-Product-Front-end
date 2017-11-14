@@ -1,0 +1,24 @@
+{
+  "name": "product-table",
+  "version": "1.0.0",
+  "description": "product table with modals and select filter",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leabs/product-table.git"
+  },
+  "keywords": [
+    "product",
+    "table",
+    "datatables"
+  ],
+  "author": "steven leabo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leabs/product-table/issues"
+  },
+  "homepage": "https://github.com/leabs/product-table#readme"
+}
